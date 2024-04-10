@@ -1,12 +1,17 @@
-import { useMemo, useCallback } from 'react'
+import { useCallback } from 'react'
 import { formatCurrency } from '../helpers'
 import { OrderItem } from '../types'
 
 type OrderTotalsProps = {
   order: OrderItem[]
   tip: number
+  placeOrder: () => void
 }
-export default function OrderTotals({ order, tip }: OrderTotalsProps) {
+export default function OrderTotals({
+  order,
+  tip,
+  placeOrder,
+}: OrderTotalsProps) {
   const subTotalAmount = useCallback(
     () => order.reduce((total, item) => total + item.quantity * item.price, 0),
     [order]
@@ -32,7 +37,13 @@ export default function OrderTotals({ order, tip }: OrderTotalsProps) {
           {formatCurrency(subTotalAmount() + tipAmount())}
         </span>
       </p>
-      <button></button>
+      <button
+        className='w-full bg-black p-3 uppercase text-white font-bold mt-10 disabled:opacity-10'
+        disabled={subTotalAmount() === 0}
+        onClick={placeOrder}
+      >
+        Guardar Orden
+      </button>
     </>
   )
 }
